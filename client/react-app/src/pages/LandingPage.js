@@ -109,8 +109,8 @@ const LandingPage = () => {
                 </div>
                 </div>
             
-
-                <Box id = "body" sx={{backgroundColor:"secondary.light", height: '500'}}>
+                <div className = "box">
+                <Box id = "body" sx={{backgroundColor:"#03235e", height: '500'}}>
                     <Typography variant="h3" align="center" sx={{margin: 4, color: "secondary.contrastText"}}>
                         Graphs
                     </Typography>
@@ -166,6 +166,7 @@ const LandingPage = () => {
 
                     </Typography>
                 </Box>
+                </div>
 
 
                 
