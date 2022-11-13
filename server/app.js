@@ -40,11 +40,27 @@ app.get("/:item/:user_latitude/:user_longitude", cors(), (req, res) => {
     console.log("html: " + html);
     let $ = cheerio.load(html);
     const wrapper = $('#all-listings-results');
-    console.log("wrapper html: " + wrapper.html());
+    //console.log("wrapper html: " + wrapper.html());
     //console.log("")
   
     nearest_recycling_center_name = wrapper.children().first().children().first().children().first().find('h2').text();
     console.log('Nearest Recycling Center Name: ' + nearest_recycling_center_name);
+
+    let temp = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href'))
+    console.log("temp: " + temp);
+
+    index_nearest_recycling_center_latitude = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href')).indexOf("latitude");
+    console.log("lat index: " + index_nearest_recycling_center_latitude);
+
+    nearest_recycling_center_latitude = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href')).substring(index_nearest_recycling_center_latitude + 9, index_nearest_recycling_center_latitude + 15);
+    console.log("lat: " + nearest_recycling_center_latitude);
+
+    index_nearest_recycling_center_longitude = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href')).indexOf("longitude");
+    console.log("lng index: " + index_nearest_recycling_center_longitude);
+
+    nearest_recycling_center_longitude = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href')).substring(index_nearest_recycling_center_longitude + 10, index_nearest_recycling_center_longitude + 17);
+    console.log("lng: " + nearest_recycling_center_longitude);
+
   
     //const temp = wrapper.children().first().children().first();
     //console.log(temp.html());
@@ -83,7 +99,7 @@ app.get("/:item/:user_latitude/:user_longitude", cors(), (req, res) => {
   
     //const output = site.children('ul').children('li').children('div').children('h2').next().text();
 
-    res.json({nearest_recycling_center_name,nearest_recycling_center_addr})
+    res.json({nearest_recycling_center_name,nearest_recycling_center_addr, nearest_recycling_center_latitude, nearest_recycling_center_longitude})
     
   })
 })

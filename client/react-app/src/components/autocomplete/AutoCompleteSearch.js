@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 let item = ''
 let nearest_recycling_center_name = '';
 let nearest_recycling_center_addr = '';
-
+let nearest_recycling_center_latitude = '';
+let nearest_recycling_center_longitude = '';
 
 export default function FreeSolo() { 
   let navigate = useNavigate();
@@ -43,8 +44,19 @@ export default function FreeSolo() {
           let url = 'http://localhost:5000/' + item + '/' + localStorage.getItem('user_latitude') + '/' + localStorage.getItem('user_longitude');
           fetch(url).then(response => response.json()).then(data => {
             console.log(data);
+            
             nearest_recycling_center_name = data.nearest_recycling_center_name;
             nearest_recycling_center_addr = data.nearest_recycling_center_addr;
+            nearest_recycling_center_latitude = data.nearest_recycling_center_latitude;
+            nearest_recycling_center_longitude = data.nearest_recycling_center_longitude;
+
+            localStorage.setItem('nearest_recycling_center_addr', data.nearest_recycling_center_addr); 
+            localStorage.setItem('nearest_recycling_center_latitude', data.nearest_recycling_center_latitude); 
+            localStorage.setItem('nearest_recycling_center_longitude', data.nearest_recycling_center_longitude);
+
+            console.log("neareset lat: " + localStorage.getItem('nearest_recycling_center_latitude'))
+            console.log("neareset lng: " + localStorage.getItem('nearest_recycling_center_longitude'))
+
             navigate('/user-output');
           })
           .catch(err => console.error(err));
@@ -77,4 +89,4 @@ const recycleList = [
 
 ];
 
-export {item, nearest_recycling_center_name, nearest_recycling_center_addr};
+export {item, nearest_recycling_center_name, nearest_recycling_center_addr, nearest_recycling_center_latitude, nearest_recycling_center_longitude};

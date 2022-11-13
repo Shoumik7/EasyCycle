@@ -4,7 +4,7 @@ import { Stack } from '@mui/system';
 import theme from '../css/theme.js'
 import {Button} from "@mui/material"
 import { useNavigate } from "react-router-dom";
-import {item, nearest_recycling_center_name, nearest_recycling_center_addr} from "../components/autocomplete/AutoCompleteSearch";
+import {item, nearest_recycling_center_name, nearest_recycling_center_addr, nearest_recycling_center_latitude, nearest_recycling_center_longitude} from "../components/autocomplete/AutoCompleteSearch";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import Mapping from '../components/Mapping.js';
 
