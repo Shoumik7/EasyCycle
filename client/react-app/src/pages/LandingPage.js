@@ -10,6 +10,15 @@ import { useState } from 'react';
 import {item} from '../components/autocomplete/AutoCompleteSearch'
 import USAMap from "react-usa-map";
 import HeatMap from "../components/heatmap/HeatMap"
+import CardsKey75to66 from "../components/heatmap/CardsKey75to66"
+import CardsKey65to56 from "../components/heatmap/CardsKey65to56"
+import CardsKey55to46 from "../components/heatmap/CardsKey55to46"
+import CardsKey45to36 from "../components/heatmap/CardsKey45to36"
+import CardsKey35to26 from "../components/heatmap/CardsKey35to26"
+import CardsKey25to16 from "../components/heatmap/CardsKey25to16"
+import CardsKey15to6 from "../components/heatmap/CardsKey15to6"
+import CardsKey5to0 from "../components/heatmap/CardsKey5to0"
+
 
   
 let user_latitude = 0;
@@ -165,8 +174,26 @@ const LandingPage = () => {
 
                 </Stack>
 
+                
+                
+                <Typography variant="h4" align="center" sx={{marginBottom: 5}}>
+                    Recycling rates for common containers and packaging materials (CCPM) per state
+                </Typography>
+                <Typography variant="body1" sx={{marginLeft: 1}}>
+                    Map Legend
+                </Typography>
+                <Stack direction = "row" justifyContent="left" sx={{marginBottom: 5}}>
+                    <CardsKey75to66/>
+                    <CardsKey65to56/>
+                    <CardsKey55to46/>
+                    <CardsKey45to36/>
+                    <CardsKey35to26/>
+                    <CardsKey25to16/>
+                    <CardsKey15to6/>
+                    <CardsKey5to0/>
+                </Stack>
+                
                 <HeatMap/>
-                {/* <USAMap ></USAMap> */}
 
                 <Box sx={{backgroundColor:"secondary.light", height: '500'}}>
                     <Typography variant="h3" align="center" sx={{margin: 4, color: "secondary.contrastText"}}>

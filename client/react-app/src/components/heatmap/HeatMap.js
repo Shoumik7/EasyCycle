@@ -1,13 +1,22 @@
 import React from "react";
 import { Component } from "react";
 import USAMap from "react-usa-map";
+import {Box, ThemeProvider, CssBaseline, Typography, Select, TextField, MenuItem, Autocomplete} from "@mui/material"
+import { Stack } from '@mui/system';
+import { useEffect } from "react";
+import { useState } from "react";
+import { DataThresholdingSharp } from "@mui/icons-material";
 
 
 
 class HeatMap extends Component {
 
     mapHandler = (event) => {
-        alert(event.target.dataset.name);
+        // localStorage.setItem('state', event.target.dataset.name);
+        const thing = event.target.dataset.name;
+        alert(thing);
+        return thing
+        // localStorage.setItem('state', event.target.dataset.name);
     };
     
     
@@ -225,6 +234,7 @@ class HeatMap extends Component {
                 //46%
                 fill: color55to46,
                 clickHandler: (event) => console.log('Custom handler for NJ', event.target.dataset)
+                // clickHandler: (event) => thing = event.target.dataset
 
             },
 
@@ -361,12 +371,15 @@ class HeatMap extends Component {
 
     render() {
         return(
-            <div>
+            <Stack direction="row" justifyContent="center" alignItems="center" spacing={4} sx={{margin: 4, marginBottom: 45}}>
                 <USAMap
                     customize = {this.statesCustomConfig()}
                     onClick = {this.mapHandler}
+                    // onClick = {this.titleFunc}
                 />
-            </div>
+            
+            </Stack>
+
         )
     }
 }
