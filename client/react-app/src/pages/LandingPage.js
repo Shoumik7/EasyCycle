@@ -8,6 +8,9 @@ import { SelectAllSharp } from '@mui/icons-material';
 import AutoCompleteSearch from '../components/autocomplete/AutoCompleteSearch'
 import { useState } from 'react';
 import {item} from '../components/autocomplete/AutoCompleteSearch'
+import USAMap from "react-usa-map";
+import HeatMap from "../components/heatmap/HeatMap"
+
   
 let user_latitude = 0;
 let user_longitude = 0;
@@ -108,7 +111,17 @@ const LandingPage = () => {
     }
     */
     
-
+    const statesFilling = () => {
+        return {
+          "NJ": {
+            fill: "navy",
+            clickHandler: () => alert("Custom callback for the NJ state")
+          },
+          "NY": {
+            fill: "#CC0000"
+          }
+        };
+      };
 
     return (     
         <ThemeProvider theme={theme}>
@@ -152,7 +165,8 @@ const LandingPage = () => {
 
                 </Stack>
 
-            
+                <HeatMap/>
+                {/* <USAMap ></USAMap> */}
 
                 <Box sx={{backgroundColor:"secondary.light", height: '500'}}>
                     <Typography variant="h3" align="center" sx={{margin: 4, color: "secondary.contrastText"}}>
