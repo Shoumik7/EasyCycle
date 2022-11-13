@@ -101,7 +101,7 @@ const new_position_coords = {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={4}
+        zoom={10}
         onLoad={onLoad}
         onUnmount={onUnmount}
       >
