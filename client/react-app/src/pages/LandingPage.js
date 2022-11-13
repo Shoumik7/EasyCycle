@@ -13,7 +13,6 @@ import axios from 'axios'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import videoBg from '../assets/vid.mp4'
 import graph1 from '../assets/RateOfRecycleGraph.jpg'
-
   
 let user_latitude = 0;
 let user_longitude = 0;
