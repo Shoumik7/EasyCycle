@@ -161,6 +161,12 @@ app.get('/image-predict', (req, res) => {
   );
 })
 
+app.post('/upload', (req, res) => {
+    const image = req;
+    console.log(image);
+    res.json(image);
+})
+
 
 
 

@@ -8,6 +8,8 @@ import { SelectAllSharp } from '@mui/icons-material';
 import AutoCompleteSearch from '../components/autocomplete/AutoCompleteSearch'
 import { useState } from 'react';
 import {item} from '../components/autocomplete/AutoCompleteSearch'
+import {Link} from 'react-scroll'
+import axios from 'axios'
   
 let user_latitude = 0;
 let user_longitude = 0;
@@ -44,70 +46,29 @@ const LandingPage = () => {
 
     let navigate = useNavigate()
 
-
-    //FILE HANDLING
-    let setItemAndChangeScreen = () => {
-        console.log(item);
-        //React.useEffect(() => {
-        //    console.log(text);
-        //}, []).then( navigate('/dummy'))       
-    }
-
-    let fileSelectedHandler = e =>{
-        file = e.target.files[0];
-        //console.log(e.target.files[0])
-        //this.setState({
-        //   selectedFile: e.target.files[0]
-        //})
-    }
-    let fileUploadHandler = () =>{
-        console.log(file)
-    }
-
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFile, setSelectedFile] = useState('');
 	const [isFilePicked, setIsFilePicked] = useState(false);
 
+    
+
     const changeHandler = (event) => {
-		setSelectedFile(event.target.files[0]);
+		setSelectedFile(event.target.files)
 		setIsFilePicked(true);
-	};
+        console.log(selectedFile);
+	};   
 
 	const handleSubmission = async () => {
-        
-        console.log("file: " + selectedFile);
+        const data = new FormData();
+        for(var x = 0; x<selectedFile.length; x++) {
+            data.append('file', selectedFile[x])
+        }
+        axios.post("http://localhost:5000/upload", data)
+        .then(res => { 
+            setSelectedFile('http://localhost:5000/public/images/'+res.data.filename)
+        })
 
-        const formData = new FormData();
-		formData.append('File', selectedFile);
-
-        let url = 'http://freeimage.host/api/1/upload/?key=6d207e02198a847aa98d0a2a901485a5&source=' + {selectedFile} + '&format=json';
-		fetch(
-			url,
-			{
-				method: 'POST',
-				body: formData,
-                mode: 'no-cors'
-			}
-		)
-			.then((response) => response.json())
-			.then((result) => {
-				console.log('Success:', result);
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
 	};
-        
-	
 
-    /*
-    const createItems = (concepts)=> {
-        const items = concepts.reduce((accumulator, item)=>{ 
-            return accumulator+<li>${item.name}, probability: ${item.value}</li>; 
-        },""); 
-        return items; 
-    }
-    */
-    
 
 
     return (     
@@ -128,28 +89,13 @@ const LandingPage = () => {
                         //<span><Button onClick = {setItemAndChangeScreen} color="primary" variant="contained">Upload Image</Button></span>
                     }
                     <Stack direction = "row" justifyContent="center">
-
-                        <input type="file" onChange={changeHandler}/>
-                        {
-                            /*
-                        {isFilePicked ? (
-                        <div>
-                            <p>Filename: {selectedFile.name}</p>
-                            <p>Filetype: {selectedFile.type}</p>
-                            <p>Size in bytes: {selectedFile.size}</p>
-                            <p>
-                                lastModifiedDate:{' '}
-						        {selectedFile.lastModifiedDate.toLocaleDateString()}
-					        </p>
-				        </div>
-                    ) : (
-                        <p>Select a file to show details</p>
-                    )}
-                    */
-                    }
-                        <button onClick={handleSubmission}>Upload</button>
+                        <input type="file" name="file" onChange={changeHandler} />
+                        <Button onClick={handleSubmission}>Upload Image</Button>
                     </Stack>
 
+                </Stack>
+                <Stack justifyContent="center" margin = "20">
+                    <li><Link to="body" spy={true} smooth={true}>Down Arrow</Link></li>
                 </Stack>
 
             
@@ -158,7 +104,7 @@ const LandingPage = () => {
                     <Typography variant="h3" align="center" sx={{margin: 4, color: "secondary.contrastText"}}>
                         EASYYYY
                     </Typography>
-                    <Typography variant="body2" sx={{margin: 4}}>
+                    <Typography id = "body" variant="body2" sx={{margin: 4}}>
                         {/* TODO: Change this text/body */}
                         <p>
                         asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf, build relationships with local farmers, and get a better picture of where and how their food is produced. 

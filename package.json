@@ -25,6 +25,7 @@
     "react-geocode": "^0.2.3",
     "react-router-dom": "^6.4.2",
     "react-scripts": "^5.0.1",
+    "react-scroll": "^1.8.8",
     "request": "^2.88.2"
   },
   "name": "easycycle",
