@@ -46,31 +46,38 @@ const LandingPage = () => {
 
     let navigate = useNavigate()
 
-    const [selectedFile, setSelectedFile] = useState('');
-	const [isFilePicked, setIsFilePicked] = useState(false);
+    const [image, setImage] = useState({})
+    const [base64, setBase64] = useState({ preview: '', data: '' })
 
+    const [status, setStatus] = useState('')
+
+    const handleFileChange = async (e) => {
+        // const img = {
+        // preview: URL.createObjectURL(e.target.files[0]),
+        // data: e.target.files[0],
+        // }
+        setImage(e.target.files[0]);
+        setBase64(await getBase64(image));
+        //setImage(img.data)
+        console.log("base 64:" + base64);
+    }
+
+    React.useEffect(() => {
+        console.log(image);
+    }, [image])
+
+    const handleSubmit = async (e) => {
+        fetch("http://localhost:5000/image-predict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(base64)}).then(data => {console.log("data: " + data.json()); localStorage.setItem('item: ', 'bottle')});
+        
+    }
+
+    const getBase64 = (file) => new Promise(function (resolve, reject) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = (error) => reject('Error: ', error);
+    })
     
-
-    const changeHandler = (event) => {
-		setSelectedFile(event.target.files)
-		setIsFilePicked(true);
-        console.log(selectedFile);
-	};   
-
-	const handleSubmission = async () => {
-        const data = new FormData();
-        for(var x = 0; x<selectedFile.length; x++) {
-            data.append('file', selectedFile[x])
-        }
-        axios.post("http://localhost:5000/upload", data)
-        .then(res => { 
-            setSelectedFile('http://localhost:5000/public/images/'+res.data.filename)
-        })
-
-	};
-
-
-
     return (     
         <ThemeProvider theme={theme}>
             <CssBaseline enableColorScheme />
@@ -89,16 +96,14 @@ const LandingPage = () => {
                         //<span><Button onClick = {setItemAndChangeScreen} color="primary" variant="contained">Upload Image</Button></span>
                     }
                     <Stack direction = "row" justifyContent="center">
-                        <input type="file" name="file" onChange={changeHandler} />
-                        <Button onClick={handleSubmission}>Upload Image</Button>
+                        <input type="file" name="file" onChange={handleFileChange} />
+                        <Button onClick={handleSubmit}>Upload Image</Button>
                     </Stack>
 
                 </Stack>
                 <Stack justifyContent="center" margin = "20">
                     <li><Link to="body" spy={true} smooth={true}>Down Arrow</Link></li>
                 </Stack>
-
-            
 
                 <Box sx={{backgroundColor:"secondary.light", height: '500'}}>
                     <Typography variant="h3" align="center" sx={{margin: 4, color: "secondary.contrastText"}}>

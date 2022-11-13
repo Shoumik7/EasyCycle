@@ -4,15 +4,24 @@ let axios = require("axios");
 const cheerio = require('cheerio');
 const request = require('request');
 const cors = require('cors');
-
+const fileUpload = require('express-fileupload')
+const multer = require('multer')
 const Clarifai = require('clarifai')
-
 app.use(cors());
 
-
 require('dotenv').config()
-
 const PORT = process.env.PORT || 5000;
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, __dirname)
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  },
+})
+
+const upload = multer({ storage: storage })
 
 app.listen(PORT, () =>{
   const url = `http://localhost:${PORT}/`
@@ -51,6 +60,7 @@ app.get("/:item/:user_latitude/:user_longitude", cors(), (req, res) => {
     let temp = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href'))
     console.log("temp: " + temp);
 
+    /*
     index_nearest_recycling_center_latitude = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href')).indexOf("latitude");
     console.log("lat index: " + index_nearest_recycling_center_latitude);
 
@@ -62,6 +72,7 @@ app.get("/:item/:user_latitude/:user_longitude", cors(), (req, res) => {
 
     nearest_recycling_center_longitude = (wrapper.children().first().children().first().children().first().find('h2').children().attr('href')).substring(index_nearest_recycling_center_longitude + 10, index_nearest_recycling_center_longitude + 17);
     console.log("lng: " + nearest_recycling_center_longitude);
+    */
 
   
     //const temp = wrapper.children().first().children().first();
@@ -106,14 +117,25 @@ app.get("/:item/:user_latitude/:user_longitude", cors(), (req, res) => {
   })
 })
 
-app.get('/image-predict', (req, res) => {
-  const USER_ID = 'as29bnia3z50';
+// Upload Endpoint
+app.post('/image', upload.single('file'), function (req, res) {
+  res.json({})
+})
+
+
+//Model to determine item type//
+app.post('/image-predict', (req, res) => {
+
+    const bytes_64 = req.body;
+    console.log(bytes_64);
+
+    const USER_ID = 'as29bnia3z50';
     // Your PAT (Personal Access Token) can be found in the portal under Authentification
     const PAT = '4fc863f052064e70a97dfc5dc15f7dc4';
     const APP_ID = '5467c54cb7e54d2483e78627401183a5';
     // Change these to whatever model and image input you want to use
     const MODEL_ID = 'general-image-recognition';
-    const IMAGE_FILE_LOCATION = 'YOUR_IMAGE_FILE_LOCATION_HERE';
+    const IMAGE_URL = 'https://media.istockphoto.com/id/185072125/photo/bottle-of-spring-water.jpg?s=612x612&w=0&k=20&c=8uCYpbrjtHF9Gx-P3zQ27aDafFB_oJcxzXzry9CrnRc=';
     // This is optional.You can specify a model version or the empty string for the default
     const MODEL_VERSION_ID = '';
 
@@ -121,14 +143,11 @@ app.get('/image-predict', (req, res) => {
 
     const stub = ClarifaiStub.grpc();
 
-    // This will be used by every Clarifai endpoint call
-    const metadata = new grpc.Metadata();
-    metadata.set("authorization", "Key " + PAT);
+  // This will be used by every Clarifai endpoint call
+  const metadata = new grpc.Metadata();
+  metadata.set("authorization", "Key " + PAT);
 
-    const fs = require("fs");
-    const imageBytes = fs.readFileSync(IMAGE_FILE_LOCATION);
-
-    stub.PostModelOutputs(
+  stub.PostModelOutputs(
     {
         user_app_id: {
             "user_id": USER_ID,
@@ -137,7 +156,7 @@ app.get('/image-predict', (req, res) => {
         model_id: MODEL_ID,
         version_id: MODEL_VERSION_ID, // This is optional. Defaults to the latest model version.
         inputs: [
-            { data: { image: { base64: imageBytes } } }
+            { data: { image: { url: IMAGE_URL, allow_duplicate_url: true } } }
         ]
     },
     metadata,
@@ -154,21 +173,19 @@ app.get('/image-predict', (req, res) => {
         const output = response.outputs[0];
 
         console.log("Predicted concepts:");
+        let counter = 0;
         for (const concept of output.data.concepts) {
             console.log(concept.name + " " + concept.value);
+            if(counter === 2){
+              console.log("name: " + concept.name);
+              res.send('bottle');
+            }
+            counter++;
         }
     }
+
   );
-})
-
-app.post('/upload', (req, res) => {
-    const image = req;
-    console.log(image);
-    res.json(image);
-})
-
-
-
+});
 
 
 
