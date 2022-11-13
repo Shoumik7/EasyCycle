@@ -106,7 +106,6 @@ const new_position_coords = {
         onUnmount={onUnmount}
       >
         <Marker position={center}></Marker>
-        
 
         { /* Child components, such as markers, info windows, etc. */ }
         <></>
